@@ -1,0 +1,47 @@
+name: Snyk Security Scan
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  snyk-scan:
+    name: Run Snyk Security Scan
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Echo - Starting code analysis process
+        run: |
+          echo "The job was automatically triggered by a ${{ github.event_name }} event."
+          echo "This job is now running on a ${{ runner.os }} server hosted by GitHub!"
+          echo "Starting code analyze process 🔎"
+
+      - name: Install Snyk CLI
+        run: npm install -g snyk
+
+      - name: Echo - Snyk CLI installation complete
+        run: echo "Snyk CLI installed successfully."
+
+      - name: Snyk Auth
+        run: snyk auth ${{ secrets.SNYK_TOKEN }}
+
+      - name: Echo - Snyk authentication complete
+        run: echo "Snyk authentication complete."
+
+      - name: Run Snyk test
+        run: snyk test --all-sub-projects
+
+      - name: Echo - Snyk scan complete
+        run: echo "Snyk test complete. Vulnerabilities (if any) listed above."
+
+      - name: Monitor Snyk Project
+        run: snyk monitor --all-sub-projects
+
+      - name: Echo - Snyk monitoring complete
+        run: echo "🎉 Snyk monitoring complete 🎉"
