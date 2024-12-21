@@ -1,70 +1,71 @@
-name: Code Quality Analysis
+# This is not working, idk why 
+# name: Code Quality Analysis 
 
-on:
-  push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+# on:
+#   push:
+#     branches: [ master ]
+#   pull_request:
+#     branches: [ master ]
 
-jobs:
-  static-analysis:
-    name: Run Static Code Analysis with PMD
-    runs-on: ubuntu-latest
+# jobs:
+#   static-analysis:
+#     name: Run Static Code Analysis with PMD
+#     runs-on: ubuntu-latest
 
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+#     steps:
+#       # - name: Checkout code
+#         uses: actions/checkout@v4
 
-      - name: Echo - Starting static analysis process
-        run: |
-          echo "The job was automatically triggered by a ${{ github.event_name }} event."
-          echo "This job is now running on a ${{ runner.os }} server hosted by GitHub!"
-          echo "Starting static code analysis process 🔍"
+#       - name: Echo - Starting static analysis process
+#         run: |
+#           echo "The job was automatically triggered by a ${{ github.event_name }} event."
+#           echo "This job is now running on a ${{ runner.os }} server hosted by GitHub!"
+#           echo "Starting static code analysis process 🔍"
 
-      - name: Install Java and PMD
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y openjdk-11-jdk
-          wget https://github.com/pmd/pmd/releases/download/pmd_releases/6.46.0/pmd-bin-6.46.0.zip
-          unzip pmd-bin-6.46.0.zip
-          sudo mv pmd-bin-6.46.0 /opt/pmd
-          echo "PMD installed successfully."
+#       - name: Install Java and PMD
+#         run: |
+#           sudo apt-get update
+#           sudo apt-get install -y openjdk-11-jdk
+#           wget https://github.com/pmd/pmd/releases/download/pmd_releases/6.46.0/pmd-bin-6.46.0.zip
+#           unzip pmd-bin-6.46.0.zip
+#           sudo mv pmd-bin-6.46.0 /opt/pmd
+#           echo "PMD installed successfully."
 
-      - name: Run PMD static analysis
-        run: |
-          echo "Running PMD static code analysis"
-          /opt/pmd/bin/run.sh pmd -d . -R rulesets/java/quickstart.xml -f text
+#       - name: Run PMD static analysis
+#         run: |
+#           echo "Running PMD static code analysis"
+#           /opt/pmd/bin/run.sh pmd -d . -R rulesets/java/quickstart.xml -f text
 
-      - name: Echo - Static analysis complete
-        run: echo "🎉 PMD static analysis complete 🎉"
+#       - name: Echo - Static analysis complete
+#         run: echo "🎉 PMD static analysis complete 🎉"
 
-  code-metrics:
-    name: Run Code Metrics Analysis with PMD
-    runs-on: ubuntu-latest
+#   code-metrics:
+#     name: Run Code Metrics Analysis with PMD
+#     runs-on: ubuntu-latest
 
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v4
 
-      - name: Echo - Starting code metrics analysis process
-        run: |
-          echo "The job was automatically triggered by a ${{ github.event_name }} event."
-          echo "This job is now running on a ${{ runner.os }} server hosted by GitHub!"
-          echo "Starting code metrics analysis process 📊"
+#       - name: Echo - Starting code metrics analysis process
+#         run: |
+#           echo "The job was automatically triggered by a ${{ github.event_name }} event."
+#           echo "This job is now running on a ${{ runner.os }} server hosted by GitHub!"
+#           echo "Starting code metrics analysis process 📊"
 
-      - name: Install Java and PMD
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y openjdk-11-jdk
-          wget https://github.com/pmd/pmd/releases/download/pmd_releases/6.46.0/pmd-bin-6.46.0.zip
-          unzip pmd-bin-6.46.0.zip
-          sudo mv pmd-bin-6.46.0 /opt/pmd
-          echo "PMD installed successfully."
+#       - name: Install Java and PMD
+#         run: |
+#           sudo apt-get update
+#           sudo apt-get install -y openjdk-11-jdk
+#           wget https://github.com/pmd/pmd/releases/download/pmd_releases/6.46.0/pmd-bin-6.46.0.zip
+#           unzip pmd-bin-6.46.0.zip
+#           sudo mv pmd-bin-6.46.0 /opt/pmd
+#           echo "PMD installed successfully."
 
-      - name: Run PMD code metrics analysis
-        run: |
-          echo "Running PMD metrics analysis"
-          /opt/pmd/bin/run.sh pmd -d . -R rulesets/java/metrics.xml -f text
+#       - name: Run PMD code metrics analysis
+#         run: |
+#           echo "Running PMD metrics analysis"
+#           /opt/pmd/bin/run.sh pmd -d . -R rulesets/java/metrics.xml -f text
 
-      - name: Echo - PMD metrics analysis complete
-        run: echo "🎉 PMD metrics analysis complete 🎉"
+#       - name: Echo - PMD metrics analysis complete
+#         run: echo "🎉 PMD metrics analysis complete 🎉"

@@ -1,0 +1,41 @@
+name: Checkstyle
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  checkstyle:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+      run: |
+        echo "🔄 Checking out the code..."
+
+    - name: Setup JDK
+      uses: actions/setup-java@v2
+      with:
+        java-version: '11'
+      run: |
+        echo "Setting up JDK 11..."
+
+    - name: Install Checkstyle
+      run: |
+        echo "Downloading Checkstyle jar..."
+        wget https://github.com/checkstyle/checkstyle/releases/download/checkstyle-8.45/checkstyle-8.45-all.jar
+        echo "Creating directory for Checkstyle..."
+        mkdir -p $HOME/checkstyle
+        echo "Moving Checkstyle jar to the directory..."
+        mv checkstyle-8.45-all.jar $HOME/checkstyle/
+
+    - name: Run Checkstyle
+      run: |
+        echo "⚙️ Running Checkstyle on the code..."
+        java -jar $HOME/checkstyle/checkstyle-8.45-all.jar -c checkstyle.xml src/main/java
+        echo "✅ Checkstyle finished running!"
