@@ -33,9 +33,7 @@ jobs:
 
       - name: Echo - Snyk authentication complete
         run: echo "Snyk authentication complete."
-
-      # - name: Run Snyk test
-      #   run: snyk test --all-sub-projects
+        
       - name: Run Snyk test
         run: snyk test --all-sub-projects || echo "Snyk test completed with issues, but pipeline continues."
         continue-on-error: true
