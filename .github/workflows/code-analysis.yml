@@ -21,30 +21,28 @@ jobs:
           echo "This job is now running on a ${{ runner.os }} server hosted by GitHub!"
           echo "Starting static code analysis process 🔍"
 
-      - name: Install Maven
-        run: sudo apt-get install -y maven
-
-      - name: Echo - Maven installation complete
-        run: echo "Maven installed successfully."
-
-      - name: Check if pom.xml exists
+      - name: Install Java
         run: |
-          if [ ! -f pom.xml ]; then
-            echo "ERROR: pom.xml not found in the root directory. Please verify the location of your Maven project."
-            exit 1
-          fi
+          sudo apt-get update
+          sudo apt-get install -y openjdk-11-jdk
 
-      - name: Run SpotBugs analysis
+      - name: Install SpotBugs
+        run: |
+          wget https://github.com/spotbugs/spotbugs/releases/download/spotbugs-4.6.0/spotbugs-4.6.0.tar.gz
+          tar -xvzf spotbugs-4.6.0.tar.gz
+          sudo mv spotbugs-4.6.0 /opt/spotbugs
+          echo "SpotBugs installed successfully."
+
+      - name: Run SpotBugs analysis (without Maven)
         run: |
           echo "Running SpotBugs analysis"
-          mvn clean install
-          mvn com.github.spotbugs:spotbugs-maven-plugin:spotbugs || echo "SpotBugs analysis completed with issues, but pipeline continues."
+          /opt/spotbugs/bin/spotbugs -textui -effort:max -low -recursive .
 
       - name: Echo - SpotBugs analysis complete
         run: echo "🎉 SpotBugs analysis complete 🎉"
 
   code-metrics:
-    name: Run Code Metrics Analysis 
+    name: Run Code Metrics Analysis
     runs-on: ubuntu-latest
 
     steps:
@@ -57,35 +55,19 @@ jobs:
           echo "This job is now running on a ${{ runner.os }} server hosted by GitHub!"
           echo "Starting code metrics analysis process 📊"
 
-      - name: Install Java and Maven
+      - name: Install Java and PMD
         run: |
           sudo apt-get update
           sudo apt-get install -y openjdk-11-jdk
-          sudo apt-get install -y maven
-          
-      - name: Echo - Java and Maven installation complete
-        run: echo "Java and Maven installed successfully."
+          wget https://github.com/pmd/pmd/releases/download/pmd_releases/6.46.0/pmd-bin-6.46.0.zip
+          unzip pmd-bin-6.46.0.zip
+          sudo mv pmd-bin-6.46.0 /opt/pmd
+          echo "PMD installed successfully."
 
-      - name: Check if pom.xml exists for PMD
-        run: |
-          if [ ! -f pom.xml ]; then
-            echo "ERROR: pom.xml not found in the root directory for PMD analysis."
-            exit 1
-          fi
-
-      - name: Run PMD metrics analysis
+      - name: Run PMD metrics analysis (without Maven)
         run: |
           echo "Running PMD metrics analysis"
-          mvn pmd:check || echo "PMD metrics analysis completed with issues, but pipeline continues."
+          /opt/pmd/bin/run.sh pmd -d . -R rulesets/java/quickstart.xml -f text
 
       - name: Echo - PMD metrics analysis complete
-        run: echo "PMD metrics analysis complete. Metrics (if any) listed above."
-
-      - name: Monitor Code Metrics Project
-        run: |
-          echo "Monitoring code metrics project"
-          # Add any relevant monitoring tools or steps for your metrics analysis project
-        continue-on-error: true
-
-      - name: Echo - Code metrics complete
-        run: echo "🎉 Code metrics analysis complete 🎉"
+        run: echo "PMD metrics analysis complete."
