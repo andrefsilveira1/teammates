@@ -27,6 +27,13 @@ jobs:
       - name: Echo - Maven installation complete
         run: echo "Maven installed successfully."
 
+      - name: Check if pom.xml exists
+        run: |
+          if [ ! -f pom.xml ]; then
+            echo "ERROR: pom.xml not found in the root directory. Please verify the location of your Maven project."
+            exit 1
+          fi
+
       - name: Run SpotBugs analysis
         run: |
           echo "Running SpotBugs analysis"
@@ -35,7 +42,6 @@ jobs:
 
       - name: Echo - SpotBugs analysis complete
         run: echo "🎉 SpotBugs analysis complete 🎉"
-
 
   code-metrics:
     name: Run Code Metrics Analysis 
@@ -59,6 +65,13 @@ jobs:
           
       - name: Echo - Java and Maven installation complete
         run: echo "Java and Maven installed successfully."
+
+      - name: Check if pom.xml exists for PMD
+        run: |
+          if [ ! -f pom.xml ]; then
+            echo "ERROR: pom.xml not found in the root directory for PMD analysis."
+            exit 1
+          fi
 
       - name: Run PMD metrics analysis
         run: |
