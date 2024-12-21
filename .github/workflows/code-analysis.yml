@@ -1,0 +1,78 @@
+name: Code Quality Analysis
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  static-analysis:
+    name: Run Static Code Analysis
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Echo - Starting static analysis process
+        run: |
+          echo "The job was automatically triggered by a ${{ github.event_name }} event."
+          echo "This job is now running on a ${{ runner.os }} server hosted by GitHub!"
+          echo "Starting static code analysis process 🔍"
+
+      - name: Install Maven
+        run: sudo apt-get install -y maven
+
+      - name: Echo - Maven installation complete
+        run: echo "Maven installed successfully."
+
+      - name: Run SpotBugs analysis
+        run: |
+          echo "Running SpotBugs analysis"
+          mvn clean install
+          mvn com.github.spotbugs:spotbugs-maven-plugin:spotbugs || echo "SpotBugs analysis completed with issues, but pipeline continues."
+
+      - name: Echo - SpotBugs analysis complete
+        run: echo "🎉 SpotBugs analysis complete 🎉"
+
+
+  code-metrics:
+    name: Run Code Metrics Analysis 
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Echo - Starting code metrics analysis process
+        run: |
+          echo "The job was automatically triggered by a ${{ github.event_name }} event."
+          echo "This job is now running on a ${{ runner.os }} server hosted by GitHub!"
+          echo "Starting code metrics analysis process 📊"
+
+      - name: Install Java and Maven
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y openjdk-11-jdk
+          sudo apt-get install -y maven
+          
+      - name: Echo - Java and Maven installation complete
+        run: echo "Java and Maven installed successfully."
+
+      - name: Run PMD metrics analysis
+        run: |
+          echo "Running PMD metrics analysis"
+          mvn pmd:check || echo "PMD metrics analysis completed with issues, but pipeline continues."
+
+      - name: Echo - PMD metrics analysis complete
+        run: echo "PMD metrics analysis complete. Metrics (if any) listed above."
+
+      - name: Monitor Code Metrics Project
+        run: |
+          echo "Monitoring code metrics project"
+          # Add any relevant monitoring tools or steps for your metrics analysis project
+        continue-on-error: true
+
+      - name: Echo - Code metrics complete
+        run: echo "🎉 Code metrics analysis complete 🎉"
