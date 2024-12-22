@@ -39,14 +39,16 @@ jobs:
         run: |
           echo "⚙️ Running CK metrics analysis on the code..."
           mkdir -p ck-output
-          # Run the CK analysis and redirect output to different CSV files
+          # Run CK metrics analysis
           java -jar ck/target/ck-*-SNAPSHOT-jar-with-dependencies.jar src/main/java false 0
-          # Assuming that CK generates class.csv, field.csv, method.csv, and variable.csv in ck-output
-          mv ck/*.csv ck-output/
+          # List the files in the root directory to check CSVs are created
+          ls -l
+          # Move CSV files from the root directory to the output folder
+          mv *.csv ck-output/
           echo "✅ CK metrics analysis finished!"
 
       - name: Upload CK Metrics CSVs
         uses: actions/upload-artifact@v3
         with:
           name: ck-metrics
-          path: ck-output/*.csv 
+          path: ck-output/*.csv
