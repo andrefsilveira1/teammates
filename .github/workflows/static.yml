@@ -1,4 +1,4 @@
-name: Checkstyle
+name: Static Code Analysis
 
 on:
   push:

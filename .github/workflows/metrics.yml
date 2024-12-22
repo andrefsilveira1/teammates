@@ -1,0 +1,49 @@
+name: CK Code Metrics Analysis
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  ck-metrics:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Echo - Checking out code
+        run: echo "🔄 Checking out the code..."
+
+      - name: Setup JDK
+        uses: actions/setup-java@v2
+        with:
+          java-version: '11'
+          distribution: 'temurin'
+
+      - name: Echo - JDK setup complete
+        run: echo "JDK 11 is ready."
+
+      - name: Install CK
+        run: |
+          echo "Cloning CK repository..."
+          git clone https://github.com/mauricioaniche/ck.git
+          cd ck
+          echo "Building CK jar..."
+          mvn clean compile assembly:single
+          echo "CK jar built successfully."
+
+      - name: Run CK Metrics Analysis
+        run: |
+          echo "⚙️ Running CK metrics analysis on the code..."
+          mkdir -p ck-output
+          java -jar ck/target/ck-*-SNAPSHOT-jar-with-dependencies.jar src/main/java false 0 > ck-output/ck-metrics.csv
+          echo "✅ CK metrics analysis finished!"
+
+      - name: Upload CK Metrics CSV
+        uses: actions/upload-artifact@v2
+        with:
+          name: ck-metrics
+          path: ck-output/ck-metrics.csv
