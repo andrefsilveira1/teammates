@@ -24,7 +24,7 @@ jobs:
           distribution: 'temurin'
 
       - name: Echo - JDK setup complete
-        run: echo "JDK 11 is ready."
+        run: echo "☕ JDK 11 is ready."
 
       - name: Install CK
         run: |
@@ -43,7 +43,7 @@ jobs:
           echo "✅ CK metrics analysis finished!"
 
       - name: Upload CK Metrics CSV
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: ck-metrics
           path: ck-output/ck-metrics.csv
