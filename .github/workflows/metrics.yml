@@ -1,4 +1,4 @@
-name: CK Code Metrics Analysis
+name: Code Metrics Analysis
 
 on:
   push:
@@ -14,17 +14,17 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Echo - Checking out code
+      - name: Echo - Checking out the code
         run: echo "🔄 Checking out the code..."
 
       - name: Setup JDK
         uses: actions/setup-java@v2
         with:
-          java-version: '11'
+          java-version: '17' 
           distribution: 'temurin'
 
       - name: Echo - JDK setup complete
-        run: echo "☕ JDK 11 is ready."
+        run: echo "☕ JDK 17 is ready."
 
       - name: Install CK
         run: |
