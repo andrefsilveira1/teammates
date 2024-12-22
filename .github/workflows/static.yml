@@ -21,6 +21,7 @@ jobs:
         uses: actions/setup-java@v2
         with:
           java-version: '11'
+          distribution: 'temurin'
 
       - name: Echo - JDK setup complete
         run: echo "☕ JDK 11 is ready."
